@@ -4,7 +4,7 @@
   <name>tutorial_interfaces</name>
   <version>0.0.0</version>
   <description>Tutorial interface package to also create my own interfaces</description>
-  <maintainer email="michael.pan31415@gmail.com">michael</maintainer>
+  <maintainer email="michael.pan31415@gmail.com">Michael Pan</maintainer>
   <license>Apache License 2.0</license>
 
   <depend>geometry_msgs</depend>

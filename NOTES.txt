@@ -1,12 +1,11 @@
 
 ################################ TO RUN IN SIMULATION ################################
 
-1. ros2 launch panda gz.launch.py (if joint_trajectory_controller errors appear, repeat Notion instructions)
+1. ros2 launch panda gz.launch.py
 
 2. ros2 launch cpp_pubsub gazebo.launch.py
 
 3. ros2 run cpp_pubsub gazebo_controller
-
 
 
 
