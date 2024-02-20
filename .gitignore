@@ -1,5 +1,5 @@
 
-ros2_ws/src/examples/
+ros2_ws/src/.vscode/
 ros2_ws/src/ros_tutorials/
 
 ros2_ws/build

@@ -1,8 +1,0 @@
-msg/Falconpos.idl
-msg/Falconpos.msg
-msg/PosInfo.idl
-msg/PosInfo.msg
-srv/AddThreeInts.idl
-srv/AddThreeInts.srv
-srv/AddThreeInts_Request.msg
-srv/AddThreeInts_Response.msg
