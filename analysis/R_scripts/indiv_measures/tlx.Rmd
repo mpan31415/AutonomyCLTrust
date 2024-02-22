@@ -1,0 +1,128 @@
+---
+title: "p_trust"
+output: html_document
+date: "2023-09-19"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Analysis script for "
+
+```{r load libraries}
+library(readr)
+library(tidyverse)
+library(ggpubr)
+library(rstatix)
+library(stats)
+library(lme4)
+library(dplyr)
+library(ez)
+library(ltm)
+```
+
+
+## Extract dataframe from csv file and get (mean, sd) or (mean, se) summary
+
+```{r read csv}
+
+tlx_df <- read_csv("grouped_tlx.csv")
+
+######################### get mean and sd (or se) ######################### 
+tlx_df %>%
+  group_by(autonomy, order) %>%
+  get_summary_stats(tlx_ave, type = "mean_sd")
+
+
+tlx_dims_df <- data.frame(tlx_df$tlx_mental, tlx_df$tlx_physical, tlx_df$tlx_hurried, 
+                          tlx_df$tlx_insecure, tlx_df$tlx_hard, tlx_df$tlx_successful)
+
+######################### calculate Cronbach's Alpha with 95% confidence interval ######################### 
+cronbach.alpha(tlx_dims_df, CI=TRUE)
+
+
+```
+
+## Plots
+
+```{r do plotting}
+
+## define custom median function
+plot.median <- function(x) {
+  m <- median(x)
+  c(y = m, ymin = m, ymax = m)
+}
+
+## define custom mean function
+plot.median <- function(x) {
+  m <- mean(x)
+  c(y = m, ymin = m, ymax = m)
+}
+
+######################### cool dot plot 2 ######################### 
+p <- ggplot(tlx_df,aes(x=order,y=tlx_ave, fill=order)) + geom_dotplot(binaxis='y', stackdir='center', stackratio=1.5, dotsize=0.6) + 
+                    labs( x = "Order", y = "NASA-TLX", fill = "Order") + theme_minimal() +
+stat_summary(fun.y = mean, geom="crossbar", colour="red", width=0.5, size=0.5) +
+scale_fill_brewer(palette = "Set2") +
+    theme(plot.title = element_text(size = 15, face = "bold"),
+        axis.title.x = element_text(size = 18, face = "bold"),
+        axis.title.y = element_text(size = 18, face = "bold"),
+        axis.text = element_text(size = 18),
+        legend.title = element_text(size = 12),
+        legend.text = element_text(size = 11),
+        legend.position= "none") +
+  facet_grid(. ~ autonomy, ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        strip.text.x = element_text(angle = 0, hjust = 0.5, size = 18), legend.position = "none")
+
+p
+
+ggexport(p, filename = "pdfs/tlx.pdf")
+
+```
+
+
+## Check assumptions
+
+```{r check assumptions}
+
+######################### check for outliers ######################### 
+tlx_df %>%
+  group_by(autonomy, order) %>%
+  identify_outliers(tlx_ave)
+
+######################### check normality ######################### 
+ggqqplot(tlx_df, "tlx_ave", ggtheme = theme_bw()) + facet_grid(autonomy ~ order)
+
+######################### check variance homogeneity ######################### 
+tlx_df %>%
+  group_by(autonomy) %>%
+  levene_test(tlx_ave ~ order)
+
+######################### check covariance homogeneity ######################### 
+box_m(tlx_df[, "tlx_ave", drop = FALSE], tlx_df$order)
+
+```
+
+
+## Fit Model
+
+```{r fit model}
+
+######################### Two-way mixed ANOVA test #########################  
+res.aov <- anova_test(data = tlx_df, dv = tlx_ave, wid = pid, between = order, within = autonomy)
+anova_tlx_ave <- get_anova_table(res.aov)
+anova_tlx_ave
+
+# ######################### NON-SIG 2-WAY INTER: Pairwise comparisons between group levels #########################
+tlx_df %>%
+  pairwise_t_test(
+    tlx_ave ~ autonomy, paired = TRUE,
+    p.adjust.method = "bonferroni"
+  )
+
+```
+
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

@@ -1,0 +1,167 @@
+---
+title: "p_trust"
+output: html_document
+date: "2023-09-19"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Analysis script for "
+
+```{r load libraries}
+library(readr)
+library(tidyverse)
+library(ggpubr)
+library(rstatix)
+library(stats)
+library(lme4)
+library(dplyr)
+library(ez)
+```
+
+
+## Extract dataframe from csv file and get (mean, sd) or (mean, se) summary
+
+```{r read csv}
+
+pupil_df <- read_csv("grouped_pupil.csv")
+
+
+######################### get mean and sd (or se) ######################### 
+pupil_df %>%
+  group_by(autonomy, order) %>%
+  get_summary_stats(new_left, type = "mean_sd")
+
+pupil_df %>%
+  group_by(autonomy, order) %>%
+  get_summary_stats(new_right, type = "mean_sd")
+
+pupil_df %>%
+  group_by(autonomy, order) %>%
+  get_summary_stats(new_ave, type = "mean_sd")
+
+```
+
+## Plots
+
+```{r do plotting}
+
+######################### cool box plot (courtesy of Sarah) ######################### 
+ggplot(pupil_df,aes(x=order,y=new_left, fill=order))+geom_boxplot(aes(fill=order)) + labs( x = "Order", y = "new_left", fill = "Order") +   theme_minimal() +
+# stat_summary(fun = mean, geom = "point",size = 3, shape = 2, position = position_dodge(0.75), show.legend = FALSE) +
+scale_fill_brewer(palette = "Set2") +
+    theme(plot.title = element_text(size = 15, face = "bold"),
+        axis.title.x = element_text(size = 14, face = "bold"),
+        axis.title.y = element_text(size = 14, face = "bold"),
+        axis.text = element_text(size = 16),
+        legend.title = element_text(size = 12),
+        legend.text = element_text(size = 11),
+        legend.position= "none") +
+  facet_grid(. ~ autonomy) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        strip.text.x = element_text(angle = 0, hjust = 0.5, size = 12), legend.position = "none")
+
+
+######################### cool box plot (courtesy of Sarah) ######################### 
+ggplot(pupil_df,aes(x=order,y=new_right, fill=order))+geom_boxplot(aes(fill=order)) + labs( x = "Order", y = "new_right", fill = "Order") +   theme_minimal() +
+# stat_summary(fun = mean, geom = "point",size = 3, shape = 2, position = position_dodge(0.75), show.legend = FALSE) +
+scale_fill_brewer(palette = "Set2") +
+    theme(plot.title = element_text(size = 15, face = "bold"),
+        axis.title.x = element_text(size = 14, face = "bold"),
+        axis.title.y = element_text(size = 14, face = "bold"),
+        axis.text = element_text(size = 16),
+        legend.title = element_text(size = 12),
+        legend.text = element_text(size = 11),
+        legend.position= "none") +
+  facet_grid(. ~ autonomy) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        strip.text.x = element_text(angle = 0, hjust = 0.5, size = 12), legend.position = "none")
+
+
+######################### cool box plot (courtesy of Sarah) ######################### 
+ggplot(pupil_df,aes(x=order,y=new_ave, fill=order))+geom_boxplot(aes(fill=order)) + labs( x = "Order", y = "Pupil Diameter", fill = "Order") +   theme_minimal() +
+# stat_summary(fun = mean, geom = "point",size = 3, shape = 2, position = position_dodge(0.75), show.legend = FALSE) +
+scale_fill_brewer(palette = "Set2") +
+    theme(plot.title = element_text(size = 15, face = "bold"),
+        axis.title.x = element_text(size = 14, face = "bold"),
+        axis.title.y = element_text(size = 14, face = "bold"),
+        axis.text = element_text(size = 16),
+        legend.title = element_text(size = 12),
+        legend.text = element_text(size = 11),
+        legend.position= "none") +
+  facet_grid(. ~ autonomy) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        strip.text.x = element_text(angle = 0, hjust = 0.5, size = 12), legend.position = "none")
+
+```
+
+
+## Check assumptions
+
+```{r check assumptions}
+
+######################### check for outliers ######################### 
+pupil_df %>%
+  group_by(autonomy, order) %>%
+  identify_outliers(new_left)
+
+pupil_df %>%
+  group_by(autonomy, order) %>%
+  identify_outliers(new_right)
+
+pupil_df %>%
+  group_by(autonomy, order) %>%
+  identify_outliers(new_ave)
+
+
+######################### check normality #########################
+ggqqplot(pupil_df, "new_left", ggtheme = theme_bw()) + facet_grid(autonomy ~ order)
+ggqqplot(pupil_df, "new_right", ggtheme = theme_bw()) + facet_grid(autonomy ~ order)
+ggqqplot(pupil_df, "new_ave", ggtheme = theme_bw()) + facet_grid(autonomy ~ order)
+
+
+######################### check variance homogeneity ######################### 
+pupil_df %>%
+  group_by(autonomy) %>%
+  levene_test(new_left ~ order)
+
+pupil_df %>%
+  group_by(autonomy) %>%
+  levene_test(new_right ~ order)
+
+pupil_df %>%
+  group_by(autonomy) %>%
+  levene_test(new_ave ~ order)
+
+
+######################### check covariance homogeneity ######################### 
+box_m(pupil_df[, "new_left", drop = FALSE], pupil_df$order)
+box_m(pupil_df[, "new_right", drop = FALSE], pupil_df$order)
+box_m(pupil_df[, "new_ave", drop = FALSE], pupil_df$order)
+
+```
+
+
+## Fit Model
+
+```{r fit model}
+
+######################### Two-way mixed ANOVA test #########################  
+res.aov <- anova_test(data = pupil_df, dv = new_left, wid = pid, between = order, within = autonomy)
+anova_new_left <- get_anova_table(res.aov)
+anova_new_left
+
+res.aov <- anova_test(data = pupil_df, dv = new_right, wid = pid, between = order, within = autonomy)
+anova_new_right <- get_anova_table(res.aov)
+anova_new_right
+
+res.aov <- anova_test(data = pupil_df, dv = new_ave, wid = pid, between = order, within = autonomy)
+anova_new_ave <- get_anova_table(res.aov)
+anova_new_ave
+
+```
+
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

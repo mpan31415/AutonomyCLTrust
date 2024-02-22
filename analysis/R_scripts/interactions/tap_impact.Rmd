@@ -1,0 +1,56 @@
+---
+title: "p_trust"
+output: html_document
+date: "2023-09-19"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Analysis script for "
+
+```{r load libraries}
+library(readr)
+library(tidyverse)
+library(ggpubr)
+library(rstatix)
+library(stats)
+library(lme4)
+library(dplyr)
+library(ez)
+```
+
+
+## Extract dataframe from csv file and get (mean, sd) or (mean, se) summary
+
+```{r read csv}
+
+tap_impact_df <- read_csv("tap_impact.csv", show_col_types = FALSE)
+tap_impact_joined_df <- read_csv("tap_impact_joined.csv", show_col_types = FALSE)
+
+base_err_list <- tap_impact_df$base_err
+round1_err_list <- tap_impact_df$round1_err
+no_auto_err_list <- tap_impact_df$no_auto_err
+
+# get summary stats
+mean(base_err_list)
+sd(base_err_list)
+
+mean(round1_err_list)
+sd(round1_err_list)
+
+mean(no_auto_err_list)
+sd(no_auto_err_list)
+
+# Compute t-test
+res <- t.test(base_err_list, no_auto_err_list, paired = TRUE)
+res
+
+# Cohen's d (effect size)
+tap_impact_joined_df %>% cohens_d(traj_err ~ round, var.equal = FALSE)
+
+```
+
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

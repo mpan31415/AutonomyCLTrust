@@ -1,0 +1,79 @@
+---
+title: "p_trust"
+output: html_document
+date: "2023-09-19"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Analysis script for "
+
+```{r load libraries}
+library(readr)
+library(tidyverse)
+library(ggpubr)
+library(rstatix)
+library(stats)
+library(lme4)
+library(dplyr)
+library(ez)
+library(ggplot2)
+library(jtools)
+library(interactions)
+```
+
+
+## Extract dataframe from csv file and get (mean, sd) or (mean, se) summary
+
+```{r read csv}
+
+big_df <- read_csv("combined.csv", show_col_types = FALSE)
+
+############################## fit a linear regression model ##############################
+fit <- lm(mdmt_ave ~ tlx_ave * autonomy, data = big_df)
+summary(fit)
+
+############################## interaction plot ##############################
+p <- interact_plot(fit, pred = tlx_ave, modx = autonomy, 
+              interval = TRUE, int.type = "confidence", int.width = .8,
+              # plot.points = TRUE,
+              x.label="Cognitive Load", y.label="Trust", 
+              modx.labels = c("low", "high")
+              ) + 
+  theme(plot.title = element_text(size = 15, face = "bold"),
+        axis.title.x = element_text(size = 28, face = "bold"),
+        axis.title.y = element_text(size = 28, face = "bold"),
+        axis.text = element_text(size = 24),
+        legend.title = element_text(size = 28),
+        legend.text = element_text(size = 28))
+
+ggsave(file="cl_trust_interact.pdf", plot=p, width=10, height=6)
+
+
+```
+
+```{r read csv}
+
+big_df <- read_csv("combined.csv", show_col_types = FALSE)
+
+# fit <- lm(mdmt_ave ~ tlx_ave * autonomy, data = big_df)
+# interact_plot(fit, pred = tlx_ave, modx = autonomy)
+
+############################## fit a linear regression model ##############################
+fit <- lm(tlx_ave ~ p_trust * autonomy, data = big_df)
+summary(fit)
+
+############################## interaction plot ##############################
+interact_plot(fit, pred = p_trust, modx = autonomy, 
+              interval = TRUE, int.type = "confidence", int.width = .8,
+              y.label="Cognitive Load", x.label="Trust", 
+              modx.labels = c("low", "high")
+              )
+
+
+```
+
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

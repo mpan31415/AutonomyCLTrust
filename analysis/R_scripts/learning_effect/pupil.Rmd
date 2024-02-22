@@ -1,0 +1,80 @@
+---
+title: "p_trust"
+output: html_document
+date: "2023-09-19"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Analysis script for "
+
+```{r load libraries}
+library(readr)
+library(tidyverse)
+library(ggpubr)
+library(rstatix)
+library(stats)
+library(lme4)
+library(dplyr)
+library(ez)
+library(ggplot2)
+library(nlme)
+library(lmerTest)
+```
+
+
+## Extract dataframe from csv file and get (mean, sd) or (mean, se) summary
+
+```{r read csv}
+
+auto0_df <- read_csv("eye0.csv", show_col_types = FALSE)
+
+model <- lmer(error ~ trial_id + (1 | pid),
+              data = auto0_df)
+summary(model)
+
+```
+
+```{r read csv}
+
+auto1_df <- read_csv("eye1.csv", show_col_types = FALSE)
+
+model <- lmer(error ~ trial_id + (1 | pid),
+              data = auto1_df)
+summary(model)
+
+```
+
+```{r read csv}
+
+auto2_df <- read_csv("eye2.csv", show_col_types = FALSE)
+
+model <- lmer(error ~ trial_id + (1 | pid),
+              data = auto2_df)
+summary(model)
+
+```
+
+```{r read csv}
+
+auto3_df <- read_csv("eye3.csv", show_col_types = FALSE)
+
+model <- lmer(error ~ trial_id + (1 | pid),
+              data = auto3_df)
+summary(model)
+
+```
+
+```{r read csv}
+
+auto4_df <- read_csv("eye4.csv", show_col_types = FALSE)
+
+model <- lmer(error ~ trial_id + (1 | pid),
+              data = auto4_df)
+summary(model)
+
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

@@ -1,0 +1,180 @@
+---
+title: "p_trust"
+output: html_document
+date: "2023-09-19"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Analysis script for "
+
+```{r load libraries}
+library(readr)
+library(tidyverse)
+library(ggpubr)
+library(rstatix)
+library(stats)
+library(lme4)
+library(dplyr)
+library(ez)
+library(ltm)
+```
+
+## Extract dataframe from csv file and get (mean, sd) or (mean, se) summary
+
+```{r read csv}
+
+mdmt_df <- read_csv("grouped_mdmt.csv")
+
+######################### get mean and sd (or se) ######################### 
+mdmt_df %>%
+  group_by(autonomy, order) %>%
+  get_summary_stats(mdmt_reliable_ave, type = "mean_sd")
+
+mdmt_df %>%
+  group_by(autonomy, order) %>%
+  get_summary_stats(mdmt_capable_ave, type = "mean_sd")
+
+mdmt_df %>%
+  group_by(autonomy, order) %>%
+  get_summary_stats(mdmt_ave, type = "mean_sd")
+
+
+mdmt_reliable_df <- data.frame(mdmt_df$mdmt_reliable, mdmt_df$mdmt_predictable, mdmt_df$mdmt_consistent, mdmt_df$mdmt_someone)
+mdmt_capable_df <- data.frame(mdmt_df$mdmt_capable, mdmt_df$mdmt_skilled, mdmt_df$mdmt_competent, mdmt_df$mdmt_meticulous)
+
+mdmt_dim_df <- data.frame(mdmt_df$mdmt_reliable, mdmt_df$mdmt_predictable, mdmt_df$mdmt_consistent, mdmt_df$mdmt_someone,
+                              mdmt_df$mdmt_capable, mdmt_df$mdmt_skilled, mdmt_df$mdmt_competent, mdmt_df$mdmt_meticulous)
+
+######################### calculate Cronbach's Alpha with 95% confidence interval ######################### 
+cronbach.alpha(mdmt_reliable_df, CI=TRUE)
+cronbach.alpha(mdmt_capable_df, CI=TRUE)
+
+cronbach.alpha(mdmt_dim_df, CI=TRUE)
+
+```
+
+## Plots
+
+```{r do plotting}
+
+######################### cool box plot (courtesy of Sarah) ######################### 
+ggplot(mdmt_df,aes(x=order,y=mdmt_reliable_ave, fill=order))+geom_boxplot(aes(fill=order)) + labs( x = "Order", y = "mdmt_reliable_ave", fill = "Order") +   theme_minimal() +
+# stat_summary(fun = mean, geom = "point",size = 3, shape = 2, position = position_dodge(0.75), show.legend = FALSE) +
+scale_fill_brewer(palette = "Set2") +
+    theme(plot.title = element_text(size = 15, face = "bold"),
+        axis.title.x = element_text(size = 14, face = "bold"),
+        axis.title.y = element_text(size = 14, face = "bold"),
+        axis.text = element_text(size = 16),
+        legend.title = element_text(size = 12),
+        legend.text = element_text(size = 11),
+        legend.position= "none") +
+  facet_grid(. ~ autonomy) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        strip.text.x = element_text(angle = 0, hjust = 0.5, size = 12), legend.position = "none")
+
+
+######################### cool box plot (courtesy of Sarah) ######################### 
+ggplot(mdmt_df,aes(x=order,y=mdmt_capable_ave, fill=order))+geom_boxplot(aes(fill=order)) + labs( x = "Order", y = "mdmt_capable_ave", fill = "Order") +   theme_minimal() +
+# stat_summary(fun = mean, geom = "point",size = 3, shape = 2, position = position_dodge(0.75), show.legend = FALSE) +
+scale_fill_brewer(palette = "Set2") +
+    theme(plot.title = element_text(size = 15, face = "bold"),
+        axis.title.x = element_text(size = 14, face = "bold"),
+        axis.title.y = element_text(size = 14, face = "bold"),
+        axis.text = element_text(size = 16),
+        legend.title = element_text(size = 12),
+        legend.text = element_text(size = 11),
+        legend.position= "none") +
+  facet_grid(. ~ autonomy) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        strip.text.x = element_text(angle = 0, hjust = 0.5, size = 12), legend.position = "none")
+
+
+######################### cool box plot (courtesy of Sarah) ######################### 
+ggplot(mdmt_df,aes(x=order,y=mdmt_ave, fill=order))+geom_boxplot(aes(fill=order)) + labs( x = "Order", y = "mdmt_ave", fill = "Order") +   theme_minimal() +
+# stat_summary(fun = mean, geom = "point",size = 3, shape = 2, position = position_dodge(0.75), show.legend = FALSE) +
+scale_fill_brewer(palette = "Set2") +
+    theme(plot.title = element_text(size = 15, face = "bold"),
+        axis.title.x = element_text(size = 14, face = "bold"),
+        axis.title.y = element_text(size = 14, face = "bold"),
+        axis.text = element_text(size = 16),
+        legend.title = element_text(size = 12),
+        legend.text = element_text(size = 11),
+        legend.position= "none") +
+  facet_grid(. ~ autonomy) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        strip.text.x = element_text(angle = 0, hjust = 0.5, size = 12), legend.position = "none")
+
+```
+
+## Check assumptions
+
+```{r check assumptions}
+
+######################### check for outliers ######################### 
+mdmt_df %>%
+  group_by(autonomy, order) %>%
+  identify_outliers(mdmt_reliable_ave)
+
+mdmt_df %>%
+  group_by(autonomy, order) %>%
+  identify_outliers(mdmt_capable_ave)
+
+mdmt_df %>%
+  group_by(autonomy, order) %>%
+  identify_outliers(mdmt_ave)
+
+
+######################### check normality ######################### 
+ggqqplot(mdmt_df, "mdmt_reliable_ave", ggtheme = theme_bw()) + facet_grid(autonomy ~ order)
+
+ggqqplot(mdmt_df, "mdmt_capable_ave", ggtheme = theme_bw()) + facet_grid(autonomy ~ order)
+
+ggqqplot(mdmt_df, "mdmt_ave", ggtheme = theme_bw()) + facet_grid(autonomy ~ order)
+
+
+######################### check variance homogeneity ######################### 
+mdmt_df %>%
+  group_by(autonomy) %>%
+  levene_test(mdmt_reliable_ave ~ order)
+
+mdmt_df %>%
+  group_by(autonomy) %>%
+  levene_test(mdmt_capable_ave ~ order)
+
+mdmt_df %>%
+  group_by(autonomy) %>%
+  levene_test(mdmt_ave ~ order)
+
+
+######################### check covariance homogeneity ######################### 
+box_m(mdmt_df[, "mdmt_reliable_ave", drop = FALSE], mdmt_df$order)
+
+box_m(mdmt_df[, "mdmt_capable_ave", drop = FALSE], mdmt_df$order)
+
+box_m(mdmt_df[, "mdmt_ave", drop = FALSE], mdmt_df$order)
+
+```
+
+## Fit Model
+
+```{r fit model}
+
+######################### Two-way mixed ANOVA test #########################  
+res.aov <- anova_test(data = mdmt_df, dv = mdmt_reliable_ave, wid = pid, between = order, within = autonomy)
+anova_mdmt_reliable_ave <- get_anova_table(res.aov)
+anova_mdmt_reliable_ave
+
+res.aov <- anova_test(data = mdmt_df, dv = mdmt_capable_ave, wid = pid, between = order, within = autonomy)
+anova_mdmt_capable_ave <- get_anova_table(res.aov)
+anova_mdmt_capable_ave
+
+res.aov <- anova_test(data = mdmt_df, dv = mdmt_ave, wid = pid, between = order, within = autonomy)
+anova_mdmt_ave <- get_anova_table(res.aov)
+anova_mdmt_ave
+
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
