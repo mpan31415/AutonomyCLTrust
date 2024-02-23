@@ -24,7 +24,7 @@ This is a research project conducted by Jiahe Pan at the University of Melbourne
 
 ## ROS2 Workspace
 
-A laptop with `Ubuntu 22.04` and `ROS2` (Humble) installations are required. The `ros2_ws` workspace contains the following two ROS packages:
+A laptop with <strong>Ubuntu 22.04</strong> and <strong>ROS2 (Humble)</strong> installations are required. The `ros2_ws` workspace contains the following two ROS packages:
 - `ros2_package`
 - `tutorial_interfaces`
 
@@ -33,15 +33,15 @@ This package contains the code files for the primary task, including receiving i
 
 | Folder | Description |
 | ------ | ------ |
-| `data_logging/csv_logs` | Contains the raw data (csv format) collected from all participants, including a header file for each participant with the calculated task performances for each trial condition. |
-| `launch` | Contains ROS launch files to run the nodes defined in the `src` folder, including launching the controller with both the [Gazebo](https://docs.ros.org/en/foxy/Tutorials/Advanced/Simulators/Ignition/Ignition.html) simulator and the real robot, and to start the RViz rendering of the task. |
-| `ros2_package` | Contains package files including useful functions to generate the trajectories, parameters to run experiments, and the definition of the `DataLogger` Python class. |
-| `scripts` | Contains the definition of the `TrajRecorder` Python class, used for receiving control commands and robot poses into temporary data structures, before logging the data to csv files using a `DataLogger` instance. |
-| `src` | Contains C++ source code for the ROS nodes used, including class definitions of the `GazeboController` and `RealController` for controlling the robot in simulation and real world respectively, the `PositionTalker` for reading the position of the Falcon joystick, and the `MarkerPublisher` for publishing visualization markers into the RViz rendering.  |
-| `urdf` | Contains a auto-generated URDF file of the Franka Emika robot arm.  |
+| `/data_logging/csv_logs` | Contains the raw data (`.csv` format) collected from all participants, including a header file for each participant with the calculated task performances for each trial condition. |
+| `/launch` | Contains ROS launch files to run the nodes defined in the `/src` folder, including launching the controller with both the [Gazebo](https://docs.ros.org/en/foxy/Tutorials/Advanced/Simulators/Ignition/Ignition.html) simulator and the real robot, and to start the RViz rendering of the task. |
+| `/ros2_package` | Contains package files including useful functions to generate the trajectories, parameters to run experiments, and the definition of the `DataLogger` Python class. |
+| `/scripts` | Contains the definition of the `TrajRecorder` Python class, used for receiving and saving control commands and robot poses into temporary data structures, before logging the data to csv files using a `DataLogger` instance. |
+| `/src` | Contains C++ source code for the ROS nodes used, including class definitions of the `GazeboController` and `RealController` for controlling the robot in simulation and the real world respectively, the `PositionTalker` for reading the position of the Falcon joystick, and the `MarkerPublisher` for publishing visualization markers into the RViz rendering.  |
+| `/urdf` | Contains a auto-generated URDF file of the Franka Emika robot arm.  |
 
 ### tutorial_interfaces
-This packcage contains custom ROS message and service definitions. Specifically, there are two custom `msg` interfaces defined for communication and data logging:
+This packcage contains custom ROS message and service definitions. Specifically, there are two custom `msg` interfaces (in the `/msg` directory) defined for communication and data logging:
 | Msg | Description |
 | ------ | ------ |
 | `Falconpos.msg` | A simple definition of a 3D coordinate in Euclidean space. Attributes: `x, y, z` |
@@ -54,13 +54,13 @@ This packcage contains custom ROS message and service definitions. Specifically,
 
 ## Eye-Tracking
 
-The implementation uses a Lenovo laptop with Windows 11 installation.
+The implementation uses a laptop with <strong>Windows 11</strong> installation.
 
 In order to use the Tobii eye-tracker, first install the required SDK from PyPI:
 ```shell script
 pip install tobii-research
 ```
-Then, it can be imported into Python and used as:
+Then, it can be imported into Python as:
 ```python
 import tobii_research as tr
 ```
@@ -85,7 +85,7 @@ To disconnect:
 ```python
 my_eyetracker.unsubscribe_from(tr.EYETRACKER_GAZE_DATA, gaze_data_callback)
 ```
-For details of implementation, please refer to `rhythm_method.py` located in the `/experiment/secondary task/` directory.
+For more details of implementation, please refer to `rhythm_method.py` located in the `/experiment/secondary task/` directory.
 
 
 <br>
@@ -94,13 +94,13 @@ For details of implementation, please refer to `rhythm_method.py` located in the
 
 ## Tapping Task
 
-The implementation uses a Lenovo laptop with Windows 11 installation.
+The implementation uses a laptop with <strong>Windows 11</strong> installation.
 
-The dual-task method is adopted in this project to capture cognitive load objectively, in addition to the pupil diameter index. Specifically, "[The Rhythm Method](https://onlinelibrary.wiley.com/doi/abs/10.1002/acp.3100)" is employed as the secondary task, which involves a rhythmic tapping at a given tempo.
+The <strong>dual-task method</strong> is adopted in this project to capture cognitive load objectively, in addition to using pupil diameter. Specifically, "[The Rhythm Method](https://onlinelibrary.wiley.com/doi/abs/10.1002/acp.3100)" is employed as the secondary task, which involves a rhythmic tapping at a given tempo.
 
 The rhythm files are in `.wav` format, and can be generated from any software (e.g. GarageBand on IOS devices).
 
-The implementation of The Rhythm Method in this project uses the following Python libraries:
+The implementation of the method in this project uses the following Python libraries:
 ```python
 from keyboard import read_key       # to record key taps on the keyboard
 from playsound import playsound     # to play the rhythm for participants' reference
@@ -109,7 +109,7 @@ which can be installed via PyPI:
 ```shell script
 pip install keyboard playsound
 ```
-For details of implementation, please refer to `rhythm_method.py` located in the `/experiment/secondary task/` directory.
+For more details of implementation, please refer to `rhythm_method.py` located in the `/experiment/secondary task/` directory.
 
 
 <br>
@@ -120,7 +120,7 @@ For details of implementation, please refer to `rhythm_method.py` located in the
 
 The data logged throughout each of the experimental sessions are written to `.csv` files. These include both the main measures of interest and the initial demographics information collected at the start of each session. The final processed `.csv` files are all located in the `/experiment/grouped_dataframes/` directory. Their descriptions and file names are summarized below:
 
-| Data | Description | Location |
+| Measure | Description | Filename |
 | ------ | ------ | ------ |
 | Trajectory Tracking Error | RMSE error (cm) between the reference and recorded trajectories of each trial | `grouped_traj_err.csv` |
 | Rhythm Tapping Error | Normalized percentage error (%) of the inter-tap interval lengths (relative to participant's baseline) | `grouped_tapping_err.csv` |
@@ -138,11 +138,11 @@ The data logged throughout each of the experimental sessions are written to `.cs
 ## Data Analysis
 
 The data analysis was performed in [RStudio](https://posit.co/download/rstudio-desktop/), leveraging existing libraries in the [R programming langauge](https://www.r-project.org/about.html). All R scripts used are located in the `/analysis/R_scripts/` directory, which has the following three sub-folders:
-- `indiv_measures`: Individual analysis for autonomy's effect on each of the measures
+- `indiv_measures`: Individual analysis of autonomy's effect on each of the measures using ANOVAs
 - `interactions`: Analysis of correlations and interaction effects between the measures and autonomy conditions
-- `learning_effect`: Identification of any possible existance of learning effects within the repeated measures across the trials of each round
+- `learning_effect`: Identification of possible learning effects for the repeated measures within each round using Linear Mixed Models
 
-
+Plots are also generated in R, and the code are embedded within the above R scripts. The preliminary plots are located in the `/analysis/plots/` directory. The actual plots used in the paper (in `.jpg` format) can be found in the `/analysis/pdf_plots/pdf_to_jpg/` directory.
 
 
 <br>
