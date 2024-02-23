@@ -19,7 +19,7 @@ This is a research project conducted by Jiahe Pan at the University of Melbourne
 
 <br>
 <a id='1'></a>
-# ROS2 Workspace
+## ROS2 Workspace
 
 Ubuntu 22.04 and ROS2 (Humble) installations are required. The `ros2_ws` workspace contains the following two ROS packages:
 - `ros2_package`
@@ -47,7 +47,7 @@ This packcage contains custom ROS message and service definitions. Specifically,
 
 <br>
 <a id='2'></a>
-# Eye-Tracking
+## Eye-Tracking
 
 In order to use the Tobii eye-trackers, first install the required SDK from PyPI:
 ```shell script
@@ -62,7 +62,7 @@ For examples of usage, please refer to `rhythm_method.py` located in the `/exper
 
 <br>
 <a id='3'></a>
-# Tapping Task
+## Tapping Task
 
 The dual-task method is adopted in this project to capture cognitive load objectively, in addition to the pupil diameter index. Specifically, "[The Rhythm Method](https://onlinelibrary.wiley.com/doi/abs/10.1002/acp.3100)" is employed as the secondary task, which involves a rhythmic tapping at a given tempo.
 
@@ -82,17 +82,17 @@ For examples of usage, please refer to `rhythm_method.py` located in the `/exper
 
 <br>
 <a id='4'></a>
-# Dataframes
+## Dataframes
 
 
 <br>
 <a id='5'></a>
-# Data Analysis
+## Data Analysis
 
 
 <br>
 <a id='6'></a>
-# Paper and Citation Info
+## Paper and Citation Info
 Please check out the preprint version of our paper on [arXiv](https://arxiv.org/abs/2402.02758).
 For including our paper in your publications, please use:
 ```
