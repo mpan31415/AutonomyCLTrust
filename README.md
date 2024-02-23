@@ -38,7 +38,7 @@ This package contains the code files for the primary task, including receiving i
 | `/ros2_package` | Contains package files including useful functions to generate the trajectories, parameters to run experiments, and the definition of the `DataLogger` Python class. |
 | `/scripts` | Contains the definition of the `TrajRecorder` Python class, used for receiving and saving control commands and robot poses into temporary data structures, before logging the data to csv files using a `DataLogger` instance. |
 | `/src` | Contains C++ source code for the ROS nodes used, including class definitions of the `GazeboController` and `RealController` for controlling the robot in simulation and the real world respectively, the `PositionTalker` for reading the position of the Falcon joystick, and the `MarkerPublisher` for publishing visualization markers into the RViz rendering.  |
-| `/urdf` | Contains a auto-generated URDF file of the Franka Emika robot arm.  |
+| `/urdf` | Contains an auto-generated URDF file of the Franka Emika robot arm.  |
 
 ### tutorial_interfaces
 This packcage contains custom ROS message and service definitions. Specifically, there are two custom `msg` interfaces (in the `/msg` directory) defined for communication and data logging:
@@ -126,9 +126,9 @@ The data logged throughout each of the experimental sessions are written to `.cs
 | Rhythm Tapping Error | Normalized percentage error (%) of the inter-tap interval lengths (relative to participant's baseline) | `grouped_tapping_err.csv` |
 | Pupil Diameter | Pupil diameter (mm) for both left and right eyes, and averaged across them | `grouped_pupil.csv` |
 | Perceived Autonomy | Participants' perceived level of robot autonomy, rated on a 10-point Likert scale | `grouped_p_auto.csv` |
-| Perceived Trust | Participants' self-reported trust using a single 10-point Likert scale | `grouped_p_trust.csv` |
+| Perceived Trust | Participants' self-reported trust using a 10-point Likert scale | `grouped_p_trust.csv` |
 | NASA-TLX | Self-reported cognitive load levels across all 6 aspects of the [NASA-TLX](https://www.sciencedirect.com/science/article/abs/pii/S0166411508623869) questionnaire | `grouped_tlx.csv` |
-| MDMT |  Self-report trust levels across all 8 dimensions of the [MDMT](https://research.clps.brown.edu/SocCogSci/Measures/CurrentVersion_MDMT.pdf) questionnaire | `grouped_mdmt.csv` |
+| MDMT |  Self-reported trust levels across all 8 dimensions of the [MDMT](https://research.clps.brown.edu/SocCogSci/Measures/CurrentVersion_MDMT.pdf) questionnaire | `grouped_mdmt.csv` |
 
 
 <br>
