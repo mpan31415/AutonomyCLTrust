@@ -1,11 +1,11 @@
 # AutonomyCLTrust
 
-This is a research project conducted by Jiahe Pan at the University of Melbourne, Australia, under supervision of Jonathan Eden, Denny Oetomo and Wafa Johal. It utilizes a shared control teleoperated trajectory tracking setup to investigate the relationship between robot autonomy and the human operator's cognitive load and trust. It uses the [Franka Emika robot arm](https://franka.de/research) and the [Novint Falcon haptic device](https://www.forcedimension.com/company/about) for the primary trajectory tracking task and [Tobii eye trackers](https://www.tobii.com/solutions/scientific-research) for one of the cognitive load measures. Experiments were conducted with 24 participants. 
+This is a research project conducted by Jiahe Pan at the University of Melbourne, Australia, under supervision of Jonathan Eden, Denny Oetomo and Wafa Johal. We utilize a shared control teleoperated trajectory tracking setup to investigate the relationship between robot autonomy and the human operator's cognitive load and trust. We use the [Franka Emika robot arm](https://franka.de/research) and the [Novint Falcon haptic device](https://www.forcedimension.com/company/about) for the primary trajectory tracking task and [Tobii eye trackers](https://www.tobii.com/solutions/scientific-research) for one of the cognitive load measures. Experiments are conducted with 24 participants. 
 
 
 ## Project Links
-- Demo video: https://youtu.be/wm3UqmnWGJs
 - Project site: https://sites.google.com/view/auto-cl-trust/home
+- Demo video: https://youtu.be/wm3UqmnWGJs
 
 
 ## Contents
@@ -18,10 +18,13 @@ This is a research project conducted by Jiahe Pan at the University of Melbourne
 - [Paper and Citation Info](#6)
 
 
+<br>
+
 <a id='1'></a>
+
 ## ROS2 Workspace
 
-Ubuntu 22.04 and ROS2 (Humble) installations are required. The `ros2_ws` workspace contains the following two ROS packages:
+A laptop with `Ubuntu 22.04` and `ROS2` (Humble) installations are required. The `ros2_ws` workspace contains the following two ROS packages:
 - `ros2_package`
 - `tutorial_interfaces`
 
@@ -45,10 +48,15 @@ This packcage contains custom ROS message and service definitions. Specifically,
 | `PosInfo.msg` | A definition of the state vector of the system for a given timestamp. Attributes: `ref_position[], human_position[], robot_position[], tcp_position[], time_from_start` |
 
 
+<br>
+
 <a id='2'></a>
+
 ## Eye-Tracking
 
-In order to use the Tobii eye-trackers, first install the required SDK from PyPI:
+The implementation uses a Lenovo laptop with Windows 11 installation.
+
+In order to use the Tobii eye-tracker, first install the required SDK from PyPI:
 ```shell script
 pip install tobii-research
 ```
@@ -56,11 +64,37 @@ Then, it can be imported into Python and used as:
 ```python
 import tobii_research as tr
 ```
-For examples of usage, please refer to `rhythm_method.py` located in the `/experiment/secondary task/` directory.
+To connect to and receive information from the eye-tracker:
+```python
+found_eyetrackers = tr.find_all_eyetrackers()
+my_eyetracker = found_eyetrackers[0]
+my_eyetracker.subscribe_to(tr.EYETRACKER_GAZE_DATA, 
+                           gaze_data_callback, 
+                           as_dictionary=True)
 
+# Basic definition of the callback function
+def gaze_data_callback(self, gaze_data):
+
+    left_eye_gaze = gaze_data['left_gaze_point_on_display_area']
+    right_eye_gaze = gaze_data['right_gaze_point_on_display_area']
+    
+    left_pupil_diameter = gaze_data['left_pupil_diameter']
+    right_pupil_diameter = gaze_data['right_pupil_diameter']
+```
+To disconnect:
+```python
+my_eyetracker.unsubscribe_from(tr.EYETRACKER_GAZE_DATA, gaze_data_callback)
+```
+For details of implementation, please refer to `rhythm_method.py` located in the `/experiment/secondary task/` directory.
+
+
+<br>
 
 <a id='3'></a>
+
 ## Tapping Task
+
+The implementation uses a Lenovo laptop with Windows 11 installation.
 
 The dual-task method is adopted in this project to capture cognitive load objectively, in addition to the pupil diameter index. Specifically, "[The Rhythm Method](https://onlinelibrary.wiley.com/doi/abs/10.1002/acp.3100)" is employed as the secondary task, which involves a rhythmic tapping at a given tempo.
 
@@ -75,21 +109,50 @@ which can be installed via PyPI:
 ```shell script
 pip install keyboard playsound
 ```
-For examples of usage, please refer to `rhythm_method.py` located in the `/experiment/secondary task/` directory.
+For details of implementation, please refer to `rhythm_method.py` located in the `/experiment/secondary task/` directory.
 
+
+<br>
 
 <a id='4'></a>
+
 ## Dataframes
 
+The data logged throughout each of the experimental sessions are written to `.csv` files. These include both the main measures of interest and the initial demographics information collected at the start of each session. The final processed `.csv` files are all located in the `/experiment/grouped_dataframes/` directory. Their descriptions and file names are summarized below:
+
+| Data | Description | Location |
+| ------ | ------ | ------ |
+| Trajectory Tracking Error | RMSE error (cm) between the reference and recorded trajectories of each trial | `grouped_traj_err.csv` |
+| Rhythm Tapping Error | Normalized percentage error (%) of the inter-tap interval lengths (relative to participant's baseline) | `grouped_tapping_err.csv` |
+| Pupil Diameter | Pupil diameter (mm) for both left and right eyes, and averaged across them | `grouped_pupil.csv` |
+| Perceived Autonomy | Participants' perceived level of robot autonomy, rated on a 10-point Likert scale | `grouped_p_auto.csv` |
+| Perceived Trust | Participants' self-reported trust using a single 10-point Likert scale | `grouped_p_trust.csv` |
+| NASA-TLX | Self-reported cognitive load levels across all 6 aspects of the [NASA-TLX](https://www.sciencedirect.com/science/article/abs/pii/S0166411508623869) questionnaire | `grouped_tlx.csv` |
+| MDMT |  Self-report trust levels across all 8 dimensions of the [MDMT](https://research.clps.brown.edu/SocCogSci/Measures/CurrentVersion_MDMT.pdf) questionnaire | `grouped_mdmt.csv` |
+
+
+<br>
 
 <a id='5'></a>
+
 ## Data Analysis
 
+The data analysis was performed in [RStudio](https://posit.co/download/rstudio-desktop/), leveraging existing libraries in the [R programming langauge](https://www.r-project.org/about.html). All R scripts used are located in the `/analysis/R_scripts/` directory, which has the following three sub-folders:
+- `indiv_measures`: Individual analysis for autonomy's effect on each of the measures
+- `interactions`: Analysis of correlations and interaction effects between the measures and autonomy conditions
+- `learning_effect`: Identification of any possible existance of learning effects within the repeated measures across the trials of each round
+
+
+
+
+<br>
 
 <a id='6'></a>
+
 ## Paper and Citation Info
-Please check out the preprint version of our paper on [arXiv](https://arxiv.org/abs/2402.02758).
-For including our paper in your publications, please use:
+
+The manuscript is submitted to RAL for review. Meanwhile, please check out the preprint version on [arXiv](https://arxiv.org/abs/2402.02758).
+For including it in your publications, please use:
 ```
 @misc{pan2024exploring,
       title={Exploring the Effects of Shared Autonomy on Cognitive Load and Trust in Human-Robot Interaction}, 
