@@ -17,7 +17,7 @@ This is a research project conducted by Jiahe Pan at the University of Melbourne
 - [Data Analysis](#5)
 - [Paper and Citation Info](#6)
 
-<br>
+
 <a id='1'></a>
 ## ROS2 Workspace
 
@@ -45,7 +45,6 @@ This packcage contains custom ROS message and service definitions. Specifically,
 | `PosInfo.msg` | A definition of the state vector of the system for a given timestamp. Attributes: `ref_position[], human_position[], robot_position[], tcp_position[], time_from_start` |
 
 
-<br>
 <a id='2'></a>
 ## Eye-Tracking
 
@@ -60,7 +59,6 @@ import tobii_research as tr
 For examples of usage, please refer to `rhythm_method.py` located in the `/experiment/secondary task/` directory.
 
 
-<br>
 <a id='3'></a>
 ## Tapping Task
 
@@ -80,17 +78,14 @@ pip install keyboard playsound
 For examples of usage, please refer to `rhythm_method.py` located in the `/experiment/secondary task/` directory.
 
 
-<br>
 <a id='4'></a>
 ## Dataframes
 
 
-<br>
 <a id='5'></a>
 ## Data Analysis
 
 
-<br>
 <a id='6'></a>
 ## Paper and Citation Info
 Please check out the preprint version of our paper on [arXiv](https://arxiv.org/abs/2402.02758).
