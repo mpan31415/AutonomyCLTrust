@@ -5,7 +5,7 @@ This is a research project conducted by Jiahe Pan at the University of Melbourne
 
 ## Project Links
 - Project site: https://sites.google.com/view/auto-cl-trust/home
-- Demo video: https://youtu.be/jxf60EDAQTQ
+- Demo video: https://youtu.be/yizsBG1QJog
 
 
 ## Contents
