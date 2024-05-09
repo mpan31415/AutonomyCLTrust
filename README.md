@@ -154,12 +154,11 @@ Plots are also generated in R, and the code are embedded within the above R scri
 The manuscript is submitted to RAL for review. Meanwhile, please check out the preprint version on [arXiv](https://arxiv.org/abs/2402.02758).
 For including it in your publications, please use:
 ```
-@misc{pan2024exploring,
-      title={Exploring the Effects of Shared Autonomy on Cognitive Load and Trust in Human-Robot Interaction}, 
-      author={Jiahe Pan and Jonathan Eden and Denny Oetomo and Wafa Johal},
-      year={2024},
-      eprint={2402.02758},
-      archivePrefix={arXiv},
-      primaryClass={cs.RO}
+@article{pan2024effects,
+  title={Effects of Shared Control on Cognitive Load and Trust in Teleoperated Trajectory Tracking},
+  author={Pan, Jiahe and Eden, Jonathan and Oetomo, Denny and Johal, Wafa},
+  journal={IEEE Robotics and Automation Letters},
+  year={2024},
+  publisher={IEEE}
 }
 ```
