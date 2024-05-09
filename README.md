@@ -151,8 +151,8 @@ Plots are also generated in R, and the code are embedded within the above R scri
 
 ## Paper and Citation Info
 
-The manuscript is submitted to RAL for review. Meanwhile, please check out the preprint version on [arXiv](https://arxiv.org/abs/2402.02758).
-For including it in your publications, please use:
+The manuscript and supplementary video can be found on [IEEEXplore](https://ieeexplore.ieee.org/abstract/document/10517390).
+If you find our work useful, please consider citing it using:
 ```
 @article{pan2024effects,
   title={Effects of Shared Control on Cognitive Load and Trust in Teleoperated Trajectory Tracking},
