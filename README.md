@@ -1,7 +1,20 @@
-# AutonomyCLTrust
+# Effects of Shared Control on Cognitive Load and Trust in Teleoperated Trajectory Tracking
 
 This is a research project conducted by Jiahe Pan at the University of Melbourne, Australia, under supervision of Jonathan Eden, Denny Oetomo and Wafa Johal. We utilize a shared control teleoperated trajectory tracking setup to investigate the relationship between robot autonomy and the human operator's cognitive load and trust. We use the [Franka Emika robot arm](https://franka.de/research) and the [Novint Falcon haptic device](https://www.forcedimension.com/company/about) for the primary trajectory tracking task and [Tobii eye trackers](https://www.tobii.com/solutions/scientific-research) for one of the cognitive load measures. Experiments are conducted with 24 participants. 
 
+## Paper and Citation Info
+
+The manuscript and supplementary video can be found on [IEEEXplore](https://ieeexplore.ieee.org/abstract/document/10517390).
+If you find our work useful, please consider citing it using:
+```
+@article{pan2024effects,
+  title={Effects of Shared Control on Cognitive Load and Trust in Teleoperated Trajectory Tracking},
+  author={Pan, Jiahe and Eden, Jonathan and Oetomo, Denny and Johal, Wafa},
+  journal={IEEE Robotics and Automation Letters},
+  year={2024},
+  publisher={IEEE}
+}
+```
 
 ## Project Links
 - Project site: https://sites.google.com/view/auto-cl-trust/home
@@ -15,7 +28,6 @@ This is a research project conducted by Jiahe Pan at the University of Melbourne
 - [Tapping Task](#3)
 - [Dataframes](#4)
 - [Data Analysis](#5)
-- [Paper and Citation Info](#6)
 
 
 <br>
@@ -144,21 +156,3 @@ The data analysis was performed in [RStudio](https://posit.co/download/rstudio-d
 
 Plots are also generated in R, and the code are embedded within the above R scripts. The preliminary plots are located in the `/analysis/plots/` directory. The actual plots used in the paper (in `.jpg` format) can be found in the `/analysis/pdf_plots/pdf_to_jpg/` directory.
 
-
-<br>
-
-<a id='6'></a>
-
-## Paper and Citation Info
-
-The manuscript and supplementary video can be found on [IEEEXplore](https://ieeexplore.ieee.org/abstract/document/10517390).
-If you find our work useful, please consider citing it using:
-```
-@article{pan2024effects,
-  title={Effects of Shared Control on Cognitive Load and Trust in Teleoperated Trajectory Tracking},
-  author={Pan, Jiahe and Eden, Jonathan and Oetomo, Denny and Johal, Wafa},
-  journal={IEEE Robotics and Automation Letters},
-  year={2024},
-  publisher={IEEE}
-}
-```
